@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$script = <<-SCRIPT
+jupyter notebook --ip=0.0.0.0 --allow-root --no-browser
+SCRIPT
+
+
+Vagrant.configure("2") do |config|
+  if Vagrant.has_plugin? "vagrant-vbguest"
+    config.vbguest.no_install = true
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote = true
+  end
+  
+  config.vm.define :servidorUbuntuJupyterProvisionado do |servidorUbuntuJupyterProvisionado|
+    servidorUbuntuJupyterProvisionado.vm.box = "bento/ubuntu-20.04"
+    servidorUbuntuJupyterProvisionado.vm.network :private_network, ip: "192.168.100.5"
+    servidorUbuntuJupyterProvisionado.vm.hostname = "servidorUbuntuJupyterProvisionado"
+    servidorUbuntuJupyterProvisionado.vm.provision "shell", path: "script.sh"
+    servidorUbuntuJupyterProvisionado.vm.provision "shell", inline: $script, run: 'always'
+  end
+end

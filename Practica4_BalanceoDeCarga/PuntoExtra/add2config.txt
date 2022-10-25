@@ -1,0 +1,10 @@
+backend web-backend
+    balance roundrobin
+    stats enable
+    stats auth admin:admin
+    stats uri /haproxy?stats
+    server web1 192.168.100.5:80 check
+    server web2 192.168.100.4:80 check
+frontend http
+    bind *:80
+    default_backend web-backend
