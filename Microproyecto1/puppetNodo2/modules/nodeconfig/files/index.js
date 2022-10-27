@@ -2,9 +2,9 @@ const Consul = require('consul');
 const express = require('express');
 
 const SERVICE_NAME='NodeJSWebServer';
-const SERVICE_ID='m'+process.argv[2];
+const SERVICE_ID='WebServerNodo2-'+process.argv[2];
 const SCHEME='http';
-const HOST='192.168.100.7';
+const HOST='192.168.100.8';
 const PORT=process.argv[2]*1;
 const PID = process.pid;
 
@@ -12,18 +12,19 @@ const PID = process.pid;
 const app = express();
 const consul = new Consul();
 
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
 app.get('/health', function (req, res) {
     console.log('Health check!');
     res.end( "Ok." );
     });
 
 app.get('/', (req, res) => {
-  console.log('GET /', Date.now());
-  res.json({
-    data: Math.floor(Math.random() * 89999999 + 10000000),
-    data_pid: PID,
-    data_service: SERVICE_ID,
-    data_host: HOST
+  res.render('index', {
+    SERVICE_NAME: 'SERVICE NAME: ' + SERVICE_NAME,
+    SERVICE_ID: 'SERVICE ID: ' + SERVICE_ID,
+    HOST: 'SERVICE HOST: ' + HOST + ':' + PORT
   });
 });
 

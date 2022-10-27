@@ -1,2 +1,2 @@
-include baseconfig
-
+include consulconfig
+include nodeconfig

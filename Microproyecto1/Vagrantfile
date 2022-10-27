@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
             puppet.manifest_file = "site.pp"
             puppet.module_path = "puppetNodo1/modules"
         end
+        servidor1.vm.provision "shell", path: "startServicesNodes.sh", run: 'always'
     end
 
     config.vm.define :servidor2 do |servidor2|
@@ -36,12 +37,19 @@ Vagrant.configure("2") do |config|
             puppet.manifest_file = "site.pp"
             puppet.module_path = "puppetNodo2/modules"
         end
+        servidor2.vm.provision "shell", path: "startServicesNodes.sh", run: 'always'
     end
 
-    # config.vm.define :servidorProxy do |servidorProxy|
-    #     servidorProxy.vm.box = "bento/ubuntu-20.04"
-    #     servidorProxy.vm.network :private_network, ip: "192.168.100.9"
-    #     servidorProxy.vm.hostname = "servidorProxy"
-    #     servidorProxy.vm.provision "shell", path: "script_haproxy.sh"
-    # end    
+    config.vm.define :servidorHaProxy do |servidorHaProxy|
+        servidorHaProxy.vm.box = "bento/ubuntu-20.04"
+        servidorHaProxy.vm.network :private_network, ip: "192.168.100.6"
+        servidorHaProxy.vm.hostname = "servidorHaProxy"
+        servidorHaProxy.vm.provision "shell", inline: $install_puppet
+        servidorHaProxy.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppetHaproxy/manifests"
+            puppet.manifest_file = "site.pp"
+            puppet.module_path = "puppetHaproxy/modules"
+        end
+        servidorHaProxy.vm.provision "shell", path: "startServiceHaproxy.sh", run: 'always'
+    end    
 end

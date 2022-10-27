@@ -1,0 +1,4 @@
+[Service]
+ExecStart=/usr/bin/node /home/vagrant/app/index.js 3004
+Restart=on-failure
+WorkingDirectory=/home/vagrant/app
