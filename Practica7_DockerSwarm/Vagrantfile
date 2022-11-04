@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  if Vagrant.has_plugin? "vagrant-vbguest"
+    config.vbguest.no_install  = true
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote   = true
+  end
+
+  config.vm.define :servidorSwarm1 do |servidorSwarm1|
+    servidorSwarm1.vm.box = "bento/ubuntu-20.04"
+    servidorSwarm1.vm.network :private_network, ip: "192.168.100.4"
+    servidorSwarm1.vm.hostname = "servidorSwarm1"
+    servidorSwarm1.vm.provision "shell", path: "scriptDocker.sh"
+  end
+
+  config.vm.define :servidorSwarm2 do |servidorSwarm2|
+    servidorSwarm2.vm.box = "bento/ubuntu-20.04"
+    servidorSwarm2.vm.network :private_network, ip: "192.168.100.5"
+    servidorSwarm2.vm.hostname = "servidorSwarm2"
+    servidorSwarm2.vm.provision "shell", path: "scriptDocker.sh"
+  end
+end

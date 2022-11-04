@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  if Vagrant.has_plugin? "vagrant-vbguest"
+    config.vbguest.no_install  = true
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote   = true
+  end
+
+  config.vm.define :servidorCompose do |servidorCompose|
+    servidorCompose.vm.box = "bento/ubuntu-20.04"
+    servidorCompose.vm.network :private_network, ip: "192.168.100.3"
+    servidorCompose.vm.hostname = "servidorCompose"
+    servidorCompose.vm.provision "shell", path: "scriptDocker.sh"
+  end
+end
