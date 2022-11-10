@@ -1,0 +1,19 @@
+config:
+  target: "http://192.168.49.2:30000"
+  phases:
+    - duration: 10
+      arrivalRate: 50
+      name: Warm up
+    - duration: 25
+      arrivalRate: 100
+      rampTo: 500
+      name: Ramp up load
+    - duration: 60
+      arrivalRate: 1000
+      name: Sustained load
+
+scenarios:
+  - name: "request index page"
+    flow:
+      - get:
+          url: "/"
